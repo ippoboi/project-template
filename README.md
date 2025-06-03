@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Project Template
 
-## Getting Started
+A comprehensive Next.js project template with authentication, email integration, and a beautiful landing page.
 
-First, run the development server:
+## ✨ Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **🔐 Authentication**: Email/password + OAuth (Google, GitHub) using Better-Auth
+- **📧 Email Integration**: Contact forms with Resend email service
+- **🎨 Modern UI**: Beautiful landing page with Tailwind CSS and shadcn/ui components
+- **🛡️ Type Safety**: Full TypeScript support
+- **🗄️ Database**: Prisma ORM with PostgreSQL
+- **📱 Responsive**: Mobile-first design
+- **⚡ Performance**: Optimized with Next.js 15 and Turbopack
+
+## 🚀 Quick Start
+
+1. **Clone and Install:**
+
+   ```bash
+   git clone <repository-url>
+   cd project-template
+   npm install
+   ```
+
+2. **Environment Setup:**
+
+   ```bash
+   cp env.example .env.local
+   ```
+
+3. **Configure Services:**
+
+   - Follow the setup guides in the [`docs/`](./docs/) folder
+
+4. **Start Development:**
+   ```bash
+   npm run dev
+   ```
+
+## 📚 Documentation
+
+Comprehensive setup guides are available in the [`docs/`](./docs/) folder:
+
+- **[📖 Main Documentation](./docs/README.md)** - Overview and quick start
+- **[🔐 Authentication Setup](./docs/AUTH_SETUP.md)** - Better-Auth configuration
+- **[📧 Email Setup](./docs/RESEND_SETUP.md)** - Resend email integration
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Authentication**: Better-Auth
+- **Database**: Prisma + PostgreSQL
+- **Email**: Resend
+- **Styling**: Tailwind CSS + shadcn/ui
+- **Forms**: React Hook Form + Zod
+- **TypeScript**: Full type safety
+- **Build Tool**: Turbopack
+
+## 📁 Project Structure
+
+```
+project-template/
+├── docs/                     # 📚 Setup documentation
+├── src/
+│   ├── app/
+│   │   ├── (auth)/          # Authentication pages
+│   │   ├── (public)/        # Public pages (landing, contact)
+│   │   ├── api/             # API routes
+│   │   └── dashboard/       # Protected dashboard
+│   ├── components/
+│   │   ├── auth/            # Authentication components
+│   │   ├── landing-page/    # Landing page sections
+│   │   └── ui/              # Reusable UI components
+│   └── lib/                 # Utilities and configurations
+├── prisma/                  # Database schema
+└── public/                  # Static assets
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🌐 Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy `env.example` to `.env.local` and configure:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+# Database
+DATABASE_URL="postgresql://..."
 
-## Learn More
+# Authentication
+BETTER_AUTH_SECRET="your-secret-key"
+BETTER_AUTH_URL="http://localhost:3000"
 
-To learn more about Next.js, take a look at the following resources:
+# OAuth (Optional)
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+GITHUB_CLIENT_ID="your-github-client-id"
+GITHUB_CLIENT_SECRET="your-github-client-secret"
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Email
+RESEND_API_KEY="re_your_api_key"
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🚀 Deployment
 
-## Deploy on Vercel
+This template works great with:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **[Vercel](https://vercel.com)** (Recommended)
+- **[Netlify](https://netlify.com)**
+- **[Railway](https://railway.app)**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See the [deployment guide](./docs/README.md#-deployment) for detailed instructions.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+Built with ❤️ using Next.js
