@@ -7,3 +7,4 @@ export { FaqSection } from "./faq-section";
 export { CtaSection } from "./cta-section";
 export { NewsletterSection } from "./newsletter-section";
 export { Footer } from "./footer";
+export { PricingSection } from "./pricing-section";
