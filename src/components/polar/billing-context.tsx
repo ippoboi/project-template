@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState } from "react";
-import { BillingInterval } from "@/lib/stripe";
+import { BillingInterval } from "@/lib/polar";
 
 interface BillingContextType {
   interval: BillingInterval;

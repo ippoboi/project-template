@@ -4,8 +4,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql" // sqlite, mongodb, mysql, postgresql
-  url      = env("DATABASE_URL")
+  // Database provider: postgresql, mysql, sqlite, sqlserver, cockroachdb
+  // Note: MongoDB is not yet supported in Prisma 7
+  provider = "postgresql"
+  // Connection URL is configured in prisma.config.ts (Prisma 7+)
 }
 
 
@@ -19,6 +21,11 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+
+  // Polar customer relationship
+  polarCustomerId String?   @unique
+  subscriptions   Subscription[]
+  orders          Order[]
 
   @@unique([email])
   @@map("user")
@@ -67,4 +74,40 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+// Polar Subscription model
+model Subscription {
+  id                  String   @id
+  polarSubscriptionId String   @unique
+  userId              String
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId           String
+  productName         String?
+  status              String   // active, canceled, past_due, incomplete, trialing
+  currentPeriodStart  DateTime
+  currentPeriodEnd    DateTime
+  cancelAtPeriodEnd   Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("subscription")
+}
+
+// Polar Order model
+model Order {
+  id            String   @id
+  polarOrderId  String   @unique
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId     String
+  productName   String?
+  amount        Int      // Amount in cents
+  currency      String   @default("usd")
+  status        String   // pending, paid, failed
+  billingReason String?  // purchase, subscription_create, subscription_cycle, subscription_update
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("order")
 }

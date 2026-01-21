@@ -3,7 +3,7 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { MockPricingCard } from "./mock-pricing-card";
-import { BillingProvider } from "../stripe/billing-context";
+import { BillingProvider } from "../polar/billing-context";
 import { MockBillingToggle } from "./mock-billing-toggle";
 
 export function MockPricingSection() {
@@ -29,7 +29,7 @@ export function MockPricingSection() {
                 variant="outline"
                 className="bg-blue-50 text-blue-700 border-blue-200"
               >
-                📱 Demo Mode - No Stripe keys required
+                Demo Mode - No Polar keys required
               </Badge>
             </div>
 
@@ -59,7 +59,7 @@ export function MockPricingSection() {
             </p>
             <div className="mt-4">
               <Badge variant="outline" className="text-xs text-gray-500">
-                💡 This is a demo. Buttons show alerts instead of real Stripe
+                This is a demo. Buttons show alerts instead of real Polar
                 checkout.
               </Badge>
             </div>

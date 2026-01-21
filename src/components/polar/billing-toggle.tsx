@@ -4,7 +4,7 @@ import React from "react";
 import { useBilling } from "./billing-context";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { calculateYearlySavings } from "@/lib/stripe";
+import { calculateYearlySavings } from "@/lib/polar";
 
 export function BillingToggle() {
   const { interval, toggleInterval } = useBilling();

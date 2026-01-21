@@ -1,52 +1,22 @@
-import { loadStripe, Stripe } from "@stripe/stripe-js";
-import StripeNode from "stripe";
+import { Polar } from "@polar-sh/sdk";
 
-// Client-side Stripe configuration
-let stripePromise: Promise<Stripe | null>;
-
-export const getStripe = () => {
-  if (!stripePromise) {
-    const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-    if (!publishableKey) {
-      throw new Error(
-        "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not defined in environment variables"
-      );
-    }
-    stripePromise = loadStripe(publishableKey);
-  }
-  return stripePromise;
-};
-
-// Server-side Stripe configuration
-export const stripe = new StripeNode(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2025-05-28.basil",
-  appInfo: {
-    name: "Next.js Template",
-    version: "1.0.0",
-  },
+// Server-side Polar SDK instance
+export const polar = new Polar({
+  accessToken: process.env.POLAR_ACCESS_TOKEN || "",
+  server: process.env.NODE_ENV === "production" ? "production" : "sandbox",
 });
 
-// Stripe configuration constants
-export const STRIPE_CONFIG = {
-  currency: "usd",
-  payment_method_types: ["card"],
-  // You can add more default configurations here
-};
-
-// Helper function to format amount for Stripe (convert dollars to cents)
-export const formatAmountForStripe = (amount: number): number => {
-  return Math.round(amount * 100);
-};
-
-// Helper function to format amount for display (convert cents to dollars)
-export const formatAmountFromStripe = (amount: number): number => {
-  return amount / 100;
+// Polar configuration constants
+export const POLAR_CONFIG = {
+  organizationId: process.env.POLAR_ORGANIZATION_ID || "",
+  // Webhook secret for verifying webhook signatures
+  webhookSecret: process.env.POLAR_WEBHOOK_SECRET || "",
 };
 
 // Billing interval types
 export type BillingInterval = "month" | "year";
 
-// Pricing plans configuration with support for multiple intervals
+// Pricing plans configuration with Polar product IDs
 export const PRICING_PLANS = {
   starter: {
     name: "Starter",
@@ -59,8 +29,8 @@ export const PRICING_PLANS = {
       "Standard templates",
     ],
     prices: {
-      month: { amount: 0, stripePriceId: null },
-      year: { amount: 0, stripePriceId: null },
+      month: { amount: 0, productId: null },
+      year: { amount: 0, productId: null },
     },
   },
   pro: {
@@ -78,11 +48,11 @@ export const PRICING_PLANS = {
     prices: {
       month: {
         amount: 29,
-        stripePriceId: process.env.STRIPE_PRO_MONTHLY_PRICE_ID || "",
+        productId: process.env.POLAR_PRO_MONTHLY_PRODUCT_ID || "",
       },
       year: {
         amount: 290, // $290/year (save $58, ~20% discount)
-        stripePriceId: process.env.STRIPE_PRO_YEARLY_PRICE_ID || "",
+        productId: process.env.POLAR_PRO_YEARLY_PRODUCT_ID || "",
       },
     },
   },
@@ -100,8 +70,8 @@ export const PRICING_PLANS = {
       "SLA guarantee",
     ],
     prices: {
-      month: { amount: null, stripePriceId: null }, // Custom pricing
-      year: { amount: null, stripePriceId: null }, // Custom pricing
+      month: { amount: null, productId: null }, // Custom pricing
+      year: { amount: null, productId: null }, // Custom pricing
     },
   },
 } as const;
@@ -124,3 +94,43 @@ export const calculateYearlySavings = (plan: PricingPlan): number => {
   const savings = yearlyEquivalent - yearlyPrice;
   return Math.round((savings / yearlyEquivalent) * 100);
 };
+
+// Helper function to format amount for display
+export const formatAmount = (amount: number | null): string => {
+  if (amount === null) return "Custom";
+  if (amount === 0) return "Free";
+  return `$${amount}`;
+};
+
+// Types for Polar checkout
+export interface CreateCheckoutOptions {
+  productId: string;
+  customerEmail?: string;
+  successUrl: string;
+  cancelUrl?: string;
+  metadata?: Record<string, string>;
+}
+
+// Types for Polar subscription
+export interface PolarSubscription {
+  id: string;
+  status: "active" | "canceled" | "past_due" | "incomplete" | "trialing";
+  productId: string;
+  customerId: string;
+  currentPeriodStart: Date;
+  currentPeriodEnd: Date;
+  cancelAtPeriodEnd: boolean;
+}
+
+// Types for webhook events
+export type PolarWebhookEvent =
+  | "checkout.created"
+  | "checkout.updated"
+  | "subscription.created"
+  | "subscription.updated"
+  | "subscription.active"
+  | "subscription.canceled"
+  | "subscription.revoked"
+  | "order.created"
+  | "customer.created"
+  | "customer.updated";

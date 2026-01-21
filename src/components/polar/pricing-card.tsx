@@ -11,7 +11,7 @@ import {
   PricingPlan,
   getPlanPrice,
   calculateYearlySavings,
-} from "@/lib/stripe";
+} from "@/lib/polar";
 
 interface PricingCardProps {
   plan: PricingPlan;
@@ -35,7 +35,6 @@ export function PricingCard({
         <CheckoutButton
           planName="starter"
           mode="payment"
-          amount={0}
           className="w-full mb-6"
           disabled={true}
         >
@@ -49,7 +48,6 @@ export function PricingCard({
         <CheckoutButton
           planName="enterprise"
           mode="payment"
-          amount={0}
           className="w-full mb-6"
           disabled={true}
         >
@@ -58,10 +56,10 @@ export function PricingCard({
       );
     }
 
-    // Pro plan with Stripe integration
+    // Pro plan with Polar integration
     return (
       <CheckoutButton
-        priceId={currentPrice.stripePriceId || undefined}
+        productId={currentPrice.productId || undefined}
         planName={plan}
         mode="subscription"
         className="w-full mb-6 bg-gray-900 hover:bg-gray-800"
