@@ -4,8 +4,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql" // sqlite, mongodb, mysql, postgresql
-  url      = env("DATABASE_URL")
+  // Database provider: postgresql, mysql, sqlite, sqlserver, cockroachdb
+  // Note: MongoDB is not yet supported in Prisma 7
+  provider = "postgresql"
+  // Connection URL is configured in prisma.config.ts (Prisma 7+)
 }
 
 
