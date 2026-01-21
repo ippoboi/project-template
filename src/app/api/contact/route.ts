@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 // Validation schema for the contact form
 const contactFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -15,6 +13,17 @@ const contactFormSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Initialize Resend inside the handler to avoid build-time errors
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      console.error("RESEND_API_KEY is not configured");
+      return NextResponse.json(
+        { error: "Email service is not configured" },
+        { status: 503 }
+      );
+    }
+
+    const resend = new Resend(apiKey);
     const body = await request.json();
 
     // Validate the form data
@@ -33,21 +42,21 @@ export async function POST(request: NextRequest) {
           <h2 style="color: #333; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">
             New Contact Form Submission
           </h2>
-          
+
           <div style="margin: 20px 0;">
             <h3 style="color: #555; margin-bottom: 10px;">Contact Details:</h3>
             <p><strong>Name:</strong> ${firstName} ${lastName}</p>
             <p><strong>Email:</strong> ${email}</p>
             ${company ? `<p><strong>Company:</strong> ${company}</p>` : ""}
           </div>
-          
+
           <div style="margin: 20px 0;">
             <h3 style="color: #555; margin-bottom: 10px;">Message:</h3>
             <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; border-left: 4px solid #007acc;">
               ${message.replace(/\n/g, "<br>")}
             </div>
           </div>
-          
+
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #f0f0f0; color: #888; font-size: 12px;">
             <p>This email was sent from your website's contact form.</p>
           </div>
@@ -65,18 +74,18 @@ export async function POST(request: NextRequest) {
           <h2 style="color: #333; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">
             Thank you for reaching out!
           </h2>
-          
+
           <p>Hi ${firstName},</p>
-          
+
           <p>Thank you for contacting us. We've received your message and will get back to you within 24 hours.</p>
-          
+
           <div style="margin: 20px 0; background-color: #f9f9f9; padding: 15px; border-radius: 5px;">
             <h3 style="color: #555; margin-bottom: 10px;">Your message:</h3>
             <p style="margin: 0;">${message.replace(/\n/g, "<br>")}</p>
           </div>
-          
+
           <p>Best regards,<br>Your Company Team</p>
-          
+
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #f0f0f0; color: #888; font-size: 12px;">
             <p>If you have any urgent questions, please don't hesitate to call us at +1 (555) 123-4567.</p>
           </div>
