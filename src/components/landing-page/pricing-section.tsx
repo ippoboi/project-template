@@ -2,9 +2,9 @@
 
 import React from "react";
 import { Badge } from "@/components/ui/badge";
-import { PricingCard } from "@/components/stripe/pricing-card";
-import { BillingProvider } from "@/components/stripe/billing-context";
-import { BillingToggle } from "@/components/stripe/billing-toggle";
+import { PricingCard } from "@/components/polar/pricing-card";
+import { BillingProvider } from "@/components/polar/billing-context";
+import { BillingToggle } from "@/components/polar/billing-toggle";
 
 export function PricingSection() {
   return (

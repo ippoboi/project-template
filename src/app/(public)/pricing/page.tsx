@@ -2,15 +2,15 @@ import { Badge } from "@/components/ui/badge";
 import { Check, X, Users, Zap, Shield, Headphones } from "lucide-react";
 import Link from "next/link";
 
-// Real Stripe components - commented out to avoid requiring API keys
-// import { PricingCard } from "@/components/stripe/pricing-card";
-// import { CheckoutButton } from "@/components/stripe/checkout-button";
-// import { BillingProvider } from "@/components/stripe/billing-context";
-// import { BillingToggle } from "@/components/stripe/billing-toggle";
+// Real Polar components - commented out to avoid requiring API keys
+// import { PricingCard } from "@/components/polar/pricing-card";
+// import { CheckoutButton } from "@/components/polar/checkout-button";
+// import { BillingProvider } from "@/components/polar/billing-context";
+// import { BillingToggle } from "@/components/polar/billing-toggle";
 
-// Mock components for demo without Stripe keys
+// Mock components for demo without Polar keys
 import { MockPricingCard, MockCheckoutButton } from "@/components/mock-comp";
-import { BillingProvider } from "@/components/stripe/billing-context";
+import { BillingProvider } from "@/components/polar/billing-context";
 import { MockBillingToggle } from "@/components/mock-comp";
 
 export default function PricingPage() {
@@ -41,14 +41,14 @@ export default function PricingPage() {
                   variant="outline"
                   className="bg-blue-50 text-blue-700 border-blue-200"
                 >
-                  📱 Demo Mode - No Stripe keys required
+                  Demo Mode - No Polar keys required
                 </Badge>
               </div>
 
               {/* Billing Toggle */}
               <div className="mt-10">
                 {/* <BillingToggle /> */}{" "}
-                {/* Commented out - requires Stripe API keys */}
+                {/* Commented out - requires Polar API keys */}
                 <MockBillingToggle /> {/* Demo version */}
               </div>
             </div>
@@ -58,7 +58,7 @@ export default function PricingPage() {
               {/* <PricingCard plan="starter" />
               <PricingCard plan="pro" isPopular={true} />
               <PricingCard plan="enterprise" /> */}
-              {/* Commented out - requires Stripe API keys */}
+              {/* Commented out - requires Polar API keys */}
 
               {/* Demo versions */}
               <MockPricingCard plan="starter" />
@@ -267,7 +267,7 @@ export default function PricingPage() {
                   >
                     Start free trial
                   </CheckoutButton> */}
-                  {/* Commented out - requires Stripe API keys */}
+                  {/* Commented out - requires Polar API keys */}
 
                   {/* Demo version */}
                   <MockCheckoutButton

@@ -5,9 +5,9 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useBilling } from "../stripe/billing-context";
+import { useBilling } from "../polar/billing-context";
 
-// Mock pricing data that mirrors the real Stripe configuration
+// Mock pricing data that mirrors the real Polar configuration
 const MOCK_PRICING_PLANS = {
   starter: {
     name: "Starter",

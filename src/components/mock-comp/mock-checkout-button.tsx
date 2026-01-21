@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { useBilling } from "../stripe/billing-context";
+import { useBilling } from "../polar/billing-context";
 
 interface MockCheckoutButtonProps {
   planName?: string;
@@ -33,7 +33,7 @@ export function MockCheckoutButton({
       priceMap[planName as keyof typeof priceMap]?.[interval] || "Custom";
 
     alert(
-      `Demo: Would redirect to Stripe checkout for ${planName} plan\n` +
+      `Demo: Would redirect to Polar checkout for ${planName} plan\n` +
         `Mode: ${mode}\n` +
         `Billing: ${interval}ly\n` +
         `Price: $${price}${price !== "Custom" ? `/${interval === "month" ? "month" : "year"}` : ""}`

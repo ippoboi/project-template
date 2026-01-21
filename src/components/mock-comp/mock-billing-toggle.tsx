@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useBilling } from "../stripe/billing-context";
+import { useBilling } from "../polar/billing-context";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 

@@ -2,34 +2,28 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { getStripe, getPlanPrice } from "@/lib/stripe";
+import { getPlanPrice } from "@/lib/polar";
 import { Loader2 } from "lucide-react";
 import { useBilling } from "./billing-context";
 
 interface CheckoutButtonProps {
-  priceId?: string;
+  productId?: string;
   planName: string;
-  amount?: number;
-  productName?: string;
   mode?: "subscription" | "payment";
   className?: string;
   children: React.ReactNode;
   successUrl?: string;
-  cancelUrl?: string;
   disabled?: boolean;
   size?: "default" | "sm" | "lg" | "icon";
 }
 
 export function CheckoutButton({
-  priceId,
+  productId,
   planName,
-  amount,
-  productName,
   mode = "subscription",
   className,
   children,
   successUrl,
-  cancelUrl,
   disabled = false,
   size = "default",
 }: CheckoutButtonProps) {
@@ -42,30 +36,31 @@ export function CheckoutButton({
     setIsLoading(true);
 
     try {
-      // If no priceId is provided, try to get it from the current plan and interval
-      let finalPriceId = priceId;
+      // If no productId is provided, try to get it from the current plan and interval
+      let finalProductId = productId;
       if (
-        !finalPriceId &&
+        !finalProductId &&
         planName !== "starter" &&
         planName !== "enterprise"
       ) {
         const planPrice = getPlanPrice(planName as "pro", interval);
-        finalPriceId = planPrice.stripePriceId || undefined;
+        finalProductId = planPrice.productId || undefined;
       }
 
-      const response = await fetch("/api/stripe/checkout", {
-        method: "POST",
+      if (!finalProductId) {
+        throw new Error("No product ID available for this plan");
+      }
+
+      const response = await fetch("/api/polar/checkout", {
+        method: mode === "subscription" ? "POST" : "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          priceId: finalPriceId,
+          productId: finalProductId,
           planName,
-          amount,
-          productName,
-          mode,
-          successUrl: successUrl || `${window.location.origin}/success`,
-          cancelUrl: cancelUrl || window.location.href,
+          productName: planName,
+          successUrl: successUrl || `${window.location.origin}/dashboard?success=true`,
         }),
       });
 
@@ -75,17 +70,11 @@ export function CheckoutButton({
         throw new Error(data.error || "Something went wrong");
       }
 
-      const stripe = await getStripe();
-      if (!stripe) {
-        throw new Error("Stripe failed to initialize");
-      }
-
-      const { error } = await stripe.redirectToCheckout({
-        sessionId: data.sessionId,
-      });
-
-      if (error) {
-        throw new Error(error.message);
+      // Redirect to Polar checkout
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("No checkout URL returned");
       }
     } catch (error) {
       console.error("Checkout error:", error);
